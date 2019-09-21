@@ -7,7 +7,7 @@ A Telegram Bot Command Center to send messages to list of channels
 ## Pre-requisite
 
 - Python 3
-- Get API Credentials: https://my.telegram.org
+- Get API Credentials(API_KEY and API_HASH): https://my.telegram.org
 
 ---
 
@@ -21,6 +21,10 @@ A Telegram Bot Command Center to send messages to list of channels
 ---
 
 ### Development Notes
+
+- API Used: https://docs.telethon.dev/
+- Frameworks: Sanic (Based on Event Loop and AsyncIO)
+- Docker
 
 ```
 
@@ -104,8 +108,10 @@ server {
 - 
 Auto Reload
 Dockerize: `python:3.7.4-slim-stretch`, `python:3.7.4-alpine3.9`
+Kubernetes
 UI
 Structure
+HTTP Methods
 
 https://sanic-jwt.readthedocs.io/en/latest/pages/simpleusage.html
 

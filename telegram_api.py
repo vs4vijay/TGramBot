@@ -110,6 +110,7 @@ async def send_messages(request):
     logger.info(f'Me: {me.first_name} {me.last_name}: ID:{me.id}')
 
     channels = channels.split(',')
+    
     channel = channels[0]
     ch = await bot.join_channel(channel)
     if(ch is None):
