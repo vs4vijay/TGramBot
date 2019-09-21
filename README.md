@@ -71,9 +71,30 @@ async def test(request):
     return json({'status': 'authorized'})
 
 
+server {
+
+    listen 80;
+    server_name example.org;
+    charset utf-8;
+
+    location /static {
+        alias /usr/src/app/static/;
+    }
+
+    location / {
+        proxy_pass http://app:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+
 - 
 Auto Reload
 Dockerize
 UI
+Structure
+
+https://sanic-jwt.readthedocs.io/en/latest/pages/simpleusage.html
 
 ```
