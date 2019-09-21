@@ -12,7 +12,7 @@ print(config)
 
 bot = None
 
-async def main():
+async def main(channels, message):
     bot = Bot(config)
     bot.client = await bot.start()
 
@@ -45,12 +45,12 @@ async def main():
 
 def signal_handler(sig, frame):
         logger.info('Shutting down the bot')
-        # await bot.client.log_out()
+        # await bot.client.disconnect()
         sys.exit(0)
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
 
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    loop.run_until_complete(main(sys.argv[1], sys.argv[2]))
     loop.close()

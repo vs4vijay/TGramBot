@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import asyncio
 from sanic import Sanic
 from sanic.response import json
@@ -40,4 +41,5 @@ async def exception_handler(request, exception):
     return json({'success': False, 'error': str(exception)}, status=500)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=config['APP_PORT'])
+    print('sys.argv', sys.argv)
+    app.run(host='0.0.0.0', port=sys.argv[1] or config['APP_PORT'])

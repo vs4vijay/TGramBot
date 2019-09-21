@@ -1,0 +1,13 @@
+{
+    "version": 2,
+    "name": "TGramBot",
+    "builds": [{
+        "src": "server.py",
+        "use": "@ardnt/now-python-wsgi",
+        "config": { "maxLambdaSize": "50mb", "runtime": "python3.6" }
+    }],
+    "routes": [{
+        "src": "/(.*)",
+        "dest": "now_app/wsgi.py"
+    }]
+}

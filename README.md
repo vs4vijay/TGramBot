@@ -1,4 +1,7 @@
+TGramBot
+===
 
+A Telegram Bot Command Center to send messages to list of channels
 
 
 ## Pre-requisite
@@ -6,6 +9,16 @@
 - Python 3
 - Get API Credentials: https://my.telegram.org
 
+---
+
+## Running
+
+### Run with Docker
+
+- `docker build -t tgram-bot .`
+- `docker run -p 9999:9090 tgram-bot`
+
+---
 
 ### Development Notes
 
@@ -90,7 +103,7 @@ server {
 
 - 
 Auto Reload
-Dockerize
+Dockerize: `python:3.7.4-slim-stretch`, `python:3.7.4-alpine3.9`
 UI
 Structure
 
