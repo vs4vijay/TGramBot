@@ -30,15 +30,24 @@ async def index(request):
 
 @telegram_bp.route('/sessions/initiate')
 @doc.summary('Initiate a Session')
+@doc.consumes(doc.String(name='session'), doc.String(name='phone'), 
+              doc.String(name='api_key'), doc.String(name='api_hash'), location='query')
 async def session_initiate(request):
     logger.info('Initiating a Telegram Session from API')
-    loop = asyncio.get_event_loop()
-
     global bot
-    bot = Bot(config, loop)
+
+    bot_config = {
+        'APP_SESSION': request.args.get('session') or config['APP_SESSION'],
+        'PHONE': request.args.get('phone') or config['PHONE'],
+        'API_KEY': request.args.get('api_key') or config['API_KEY'],
+        'API_HASH': request.args.get('api_hash') or config['API_HASH'],
+    }
+    logger.info(bot_config)
+    bot = Bot(bot_config)
 
     try:
-        bot.client = await bot.start(config)
+        loop = asyncio.get_event_loop()
+        bot.client = await bot.start(loop)
     except Exception as e:
         logger.error(e)
         return json({'success': False, 'error': str(e)}, status=500)

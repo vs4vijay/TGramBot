@@ -42,4 +42,5 @@ async def exception_handler(request, exception):
 
 if __name__ == '__main__':
     print('sys.argv', sys.argv)
-    app.run(host='0.0.0.0', port=sys.argv[1] or config['APP_PORT'])
+    port = sys.argv[1] if len(sys.argv) > 1 else config['APP_PORT']
+    app.run(host='0.0.0.0', port=port)

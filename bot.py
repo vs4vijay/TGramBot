@@ -10,19 +10,16 @@ from logger import logger
 
 class Bot:
 
-    def __init__(self, config, loop=None):
-        logger.info(config['APP_SESSION'])
+    def __init__(self, config):
         self.config = config
+
+    async def start(self, loop=None):
         # self.session = MemorySession(config['APP_SESSION'])
         # self.session = MemorySession()
         self.client = TelegramClient(self.config['APP_SESSION'], self.config['API_KEY'], self.config['API_HASH'], loop=loop)
         # self.client.session.save_entities = False
-        # string = self.client.session.save()
-        # logger.info(string)
-        # client.session.set_dc(2, '149.154.167.40', 80)
 
-    async def start(self, config):
-        await self.client.start(phone=config['PHONE'])
+        await self.client.start(phone=self.config['PHONE'])
         client = self.client
 
         @client.on(events.NewMessage)
