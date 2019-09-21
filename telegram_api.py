@@ -25,6 +25,7 @@ async def index(request):
             '/me': 'Get Account info.',
             '/channels/join': 'Joins the list of channels',
             '/messages/send': 'Send message to list of channels',
+            '/conversations': 'Get Conversations',
             '/feeds': 'Get realtime feeds'
         }
     }
@@ -78,7 +79,7 @@ async def send_messages(request):
     if(bot and await bot.client.is_user_authorized()):
         me = await bot.me()
     else:
-        raise Exception('User not logged in')
+        raise Exception('Session not started')
 
     logger.info(f'Me: {me.first_name} {me.last_name}: ID:{me.id}')
 
@@ -171,6 +172,26 @@ async def feeds(request):
             await asyncio.sleep(1)
 
     return stream(live_feeds, content_type='text/html')
+
+@telegram_bp.route('/conversations')
+@doc.summary('Get Conversations')
+@doc.produces({'success': doc.Boolean, 'data': { 'conversations': [] }})
+async def send_messages(request):
+
+    if(bot and await bot.client.is_user_authorized()):
+        conversations = await bot.get_all_conversations()
+    else:
+        raise Exception('Session not started')
+
+    logger.info([conversation.title for conversation in conversations])
+
+    data = {
+        'success': True,
+        'data': {
+            'conversations': [conversation.title for conversation in conversations]
+        }
+    }
+    return json(data)
 
 @telegram_bp.route('/sessions/logout')
 @doc.summary('Log out from a session')
