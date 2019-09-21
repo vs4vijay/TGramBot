@@ -29,7 +29,6 @@ hypercorn myapp:app
 gunicorn myapp:app --bind 0.0.0.0:1337 --worker-class sanic.worker.GunicornWorker
 
 
- 924847283:AAFwZDQMubOUROdWOaaBNDqa5etrDdRB_HM
 
  https://sanic.readthedocs.io/en/latest/sanic/blueprints.html
 
@@ -97,4 +96,9 @@ Structure
 
 https://sanic-jwt.readthedocs.io/en/latest/pages/simpleusage.html
 
+
+Deployments:
+- platform.sh
+- OpenShift
+- 
 ```
