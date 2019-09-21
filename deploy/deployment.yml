@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tgram-bot
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tgram-bot
+    spec:
+      containers:
+        - name: tgram-bot
+          image: vs4vijay/tgram-bot
+          ports:
+            - containerPort: 9090

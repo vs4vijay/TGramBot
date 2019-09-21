@@ -110,14 +110,14 @@ async def send_messages(request):
     logger.info(f'Me: {me.first_name} {me.last_name}: ID:{me.id}')
 
     channels = channels.split(',')
-    
-    channel = channels[0]
-    ch = await bot.join_channel(channel)
-    if(ch is None):
-        data['error'] = f'Couldn\'t find or join channel {channel}'
-        return json(data, status=400)
 
-    # await bot.join_channels_and_send_message(channels, message)
+    # channel = channels[0]
+    # ch = await bot.join_channel(channel)
+    # if(ch is None):
+    #     data['error'] = f'Couldn\'t find or join channel {channel}'
+    #     return json(data, status=400)
+
+    await bot.join_channels_and_send_message(channels, message)
 
     data = {
         'success': True,
