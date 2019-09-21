@@ -37,6 +37,7 @@ async def not_found_handler(request, exception):
     return json({'success': False, 'error': str(exception)}, status=404)
 
 @app.exception(SanicException)
+@app.exception(Exception)
 async def exception_handler(request, exception):
     return json({'success': False, 'error': str(exception)}, status=500)
 

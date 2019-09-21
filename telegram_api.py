@@ -22,6 +22,8 @@ async def index(request):
             '/sessions/initiate': 'Initiate a Session',
             '/sessions/start': 'Start a session with code received on telegram app',
             '/sessions/logout': 'Log out from a session',
+            '/me': 'Get Account info.',
+            '/channels/join': 'Joins the list of channels',
             '/messages/send': 'Send message to list of channels',
             '/feeds': 'Get realtime feeds'
         }
@@ -68,6 +70,24 @@ async def session_start(request):
     
     return json({'success': True})
 
+@telegram_bp.route('/me')
+@doc.summary('Get Account info.')
+@doc.produces({'success': doc.Boolean, 'data': {}})
+async def send_messages(request):
+
+    if(bot and await bot.client.is_user_authorized()):
+        me = await bot.me()
+    else:
+        raise Exception('User not logged in')
+
+    logger.info(f'Me: {me.first_name} {me.last_name}: ID:{me.id}')
+
+    data = {
+        'success': True,
+        'data': me.stringify()
+    }
+    return json(data)
+
 @telegram_bp.route('/messages/send')
 @doc.summary('Send message to list of channels')
 @doc.consumes(doc.String(name='channels'), doc.String(name='message'), location='query')
@@ -106,6 +126,34 @@ async def send_messages(request):
     }
     return json(data)
 
+@telegram_bp.route('/channels/join')
+@doc.summary('Joins the list of channels')
+@doc.consumes(doc.String(name='channels'), location='query')
+@doc.produces({'success': doc.Boolean, 'data': {}})
+async def send_messages(request):
+    channels = request.args.get('channels')
+
+    data = {
+        'success': False,
+        'error': ''
+    }
+
+    if(channels is None):
+        data['error'] = 'No channels are specified'
+        return json(data, status=400)
+
+    channels = channels.split(',')
+
+    [await bot.join_channel(channel) for channel in channels]
+
+    data = {
+        'success': True,
+        'data': {
+            'channels': channels
+        }
+    }
+    return json(data)
+
 async def get_data(stream, count=5):
     for i in range(count):
         await stream.write(f'{dt.datetime.now} </br>')
@@ -132,12 +180,12 @@ async def session_logout(request):
 
 @telegram_bp.listener('before_server_start')
 async def before_server_start(app, loop):
-    logger.info('Starting Telegram Client')
+    logger.info('Starting Telegram Client on Bootstrap')
     # loop = asyncio.get_event_loop()
 
     # global bot
-    # bot = Bot(config, loop)
-    # bot.client = await bot.start(config)
+    # bot = Bot(config)
+    # bot.client = await bot.start(loop)
 
 @telegram_bp.listener('after_server_stop')
 async def after_server_stop(app, loop):
