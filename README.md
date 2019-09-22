@@ -20,6 +20,41 @@ A Telegram Bot Command Center to send messages to list of channels
 
 ---
 
+### Python ASGI Servers
+
+- Uvicorn 
+  -  `uvicorn server:app`
+  -  `gunicorn server:app -w 4 -k uvicorn.workers.UvicornWorker`
+- Hypercorn - `hypercorn server:app`
+- Daphne - `daphne server:app`
+- Gunicorn
+  - `gunicorn server:app --bind 0.0.0.0:9090 --worker-class sanic.worker.GunicornWorker`
+
+
+
+---
+
+## Deployment
+
+### Deploy to Heroku
+
+- `heroku login` - Login to Heroku
+- `heroku container:login` - Login to Heroku Docker Registery
+- `heroku container:push web -a tgram-bot` - Push current local docker image to registery
+- `heroku container:release web -a tgram-bot` - Release and Deploy the latest image
+- `heroku logs --tail -a tgram-bot-deploy` - To check the logs
+
+### Deployment Options
+- OpenShift - Yes
+- Repl.it - Yes, but public
+- Heroku - Yes
+- platform.sh - Nope
+- now.sh - Nope
+- DigitalOcean - https://marketplace.digitalocean.com/apps/docker
+- scalingo.com - No
+
+---
+
 ### Development Notes
 
 - API Used: https://docs.telethon.dev/
@@ -27,6 +62,10 @@ A Telegram Bot Command Center to send messages to list of channels
 - Docker
 
 ```
+
+
+Test Server: 149.154.167.40:443
+
 
 @TelethonChat
 @TelethonOfftopic
@@ -37,20 +76,6 @@ https://telegramchannels.me
 
 https://tlgrm.eu/channels/language
 
-
-ASGI are Daphne, Uvicorn, and Hypercorn.
-daphne myapp:app
-uvicorn myapp:app
-hypercorn myapp:app
-
-gunicorn myapp:app --bind 0.0.0.0:1337 --worker-class sanic.worker.GunicornWorker
-gunicorn example:app -w 4 -k uvicorn.workers.UvicornWorker
-
-uvicorn main:app --reload
-
-
-
-Test Server: 149.154.167.40:443
 
 
 
@@ -97,7 +122,7 @@ async def test(request):
 server {
 
     listen 80;
-    server_name example.org;
+    server_name app.com;
     charset utf-8;
 
     location / {
@@ -111,7 +136,7 @@ server {
 # handler = logging.StreamHandler()
 # logger.addHandler(handler)
 
-- 
+---
 Auto Reload
 Dockerize: `python:3.7.4-slim-stretch`, `python:3.7.4-alpine3.9`
 Kubernetes
@@ -125,13 +150,5 @@ https://blog.codeship.com/the-shortlist-of-docker-hosting/
 
 https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04
 
-Deployments:
-- platform.sh - Nope
-- now.sh - Nope
-- OpenShift - Yes
-- DigitalOcean - https://marketplace.digitalocean.com/apps/docker
-- Heroku - Having issues
-- scalingo.com - No
-- Repl.it - Yes, but public
 
 ```
