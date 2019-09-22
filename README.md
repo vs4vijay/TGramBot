@@ -117,9 +117,14 @@ HTTP Methods
 
 https://sanic-jwt.readthedocs.io/en/latest/pages/simpleusage.html
 
+https://blog.codeship.com/the-shortlist-of-docker-hosting/
 
 Deployments:
-- platform.sh
+- platform.sh - Nope
+- now.sh - Nope
 - OpenShift
-- 
+- DigitalOcean - https://marketplace.digitalocean.com/apps/docker
+- Heroku
+- scalingo.com
+
 ```
