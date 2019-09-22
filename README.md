@@ -44,6 +44,11 @@ uvicorn myapp:app
 hypercorn myapp:app
 
 gunicorn myapp:app --bind 0.0.0.0:1337 --worker-class sanic.worker.GunicornWorker
+gunicorn example:app -w 4 -k uvicorn.workers.UvicornWorker
+
+uvicorn main:app --reload
+
+
 
 Test Server: 149.154.167.40:443
 
@@ -95,10 +100,6 @@ server {
     server_name example.org;
     charset utf-8;
 
-    location /static {
-        alias /usr/src/app/static/;
-    }
-
     location / {
         proxy_pass http://app:8000;
         proxy_set_header Host $host;
@@ -119,12 +120,15 @@ https://sanic-jwt.readthedocs.io/en/latest/pages/simpleusage.html
 
 https://blog.codeship.com/the-shortlist-of-docker-hosting/
 
+https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04
+
 Deployments:
 - platform.sh - Nope
 - now.sh - Nope
-- OpenShift
+- OpenShift - Yes
 - DigitalOcean - https://marketplace.digitalocean.com/apps/docker
-- Heroku
-- scalingo.com
+- Heroku - Having issues
+- scalingo.com - No
+- Repl.it - Yes, but public
 
 ```

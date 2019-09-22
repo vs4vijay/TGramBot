@@ -8,14 +8,14 @@ WORKDIR /app
 
 COPY requirements.txt ./
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . ./
 
-ENV APP_PORT 9090
+ENV PORT 9090
 
-EXPOSE ${APP_PORT}
+EXPOSE ${PORT}
 
 ENTRYPOINT [ "python", "server.py" ]
 
-# CMD ["python", "server.py"]
+CMD $PORT
