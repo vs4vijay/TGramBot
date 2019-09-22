@@ -45,6 +45,8 @@ hypercorn myapp:app
 
 gunicorn myapp:app --bind 0.0.0.0:1337 --worker-class sanic.worker.GunicornWorker
 
+Test Server: 149.154.167.40:443
+
 
 
  https://sanic.readthedocs.io/en/latest/sanic/blueprints.html

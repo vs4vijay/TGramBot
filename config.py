@@ -12,5 +12,8 @@ config = {
     'API_KEY': os.getenv('API_KEY'),
     'API_HASH': os.getenv('API_HASH'),
     'CHANNELS': os.getenv('CHANNELS'),
-    'MESSAGE': os.getenv('MESSAGE')
+    'MESSAGE': os.getenv('MESSAGE'),
+    'TEST_SERVER': os.getenv('TEST_SERVER')
 }
+
+print(config)

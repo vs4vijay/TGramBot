@@ -44,16 +44,14 @@ async def session_initiate(request):
         'PHONE': request.args.get('phone') or config['PHONE'],
         'API_KEY': request.args.get('api_key') or config['API_KEY'],
         'API_HASH': request.args.get('api_hash') or config['API_HASH'],
+        'APP_ENV': config['APP_ENV'],
+        'TEST_SERVER': config['TEST_SERVER']
     }
     logger.info(bot_config)
     bot = Bot(bot_config)
 
-    try:
-        loop = asyncio.get_event_loop()
-        bot.client = await bot.start(loop)
-    except Exception as e:
-        logger.error(e)
-        return json({'success': False, 'error': str(e)}, status=500)
+    loop = asyncio.get_event_loop()
+    bot.client = await bot.start(loop)
 
     return json({'success': True})
 
@@ -117,13 +115,14 @@ async def send_messages(request):
     #     data['error'] = f'Couldn\'t find or join channel {channel}'
     #     return json(data, status=400)
 
-    await bot.join_channels_and_send_message(channels, message)
+    results = await bot.join_channels_and_send_message(channels, message)
 
     data = {
         'success': True,
         'data': {
             'channels': channels,
-            'message': message
+            'message': message,
+            'results': results
         }
     }
     return json(data)
@@ -146,12 +145,16 @@ async def send_messages(request):
 
     channels = channels.split(',')
 
-    [await bot.join_channel(channel) for channel in channels]
+    # results = [await bot.join_channel(channel) for channel in channels]
+    # results = map(lambda channel: { channel: await bot.join_channel(channel) }, channels)
+    results = {}
+    for channel in channels:
+        results[channel] = await bot.join_channel(channel)
 
     data = {
         'success': True,
         'data': {
-            'channels': channels
+            'channels': results
         }
     }
     return json(data)

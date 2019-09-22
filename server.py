@@ -8,6 +8,7 @@ from sanic.exceptions import NotFound, SanicException
 from sanic_openapi import swagger_blueprint
 
 from config import config
+from logger import logger
 from telegram_api import telegram_bp
 
 
@@ -39,8 +40,9 @@ async def not_found_handler(request, exception):
 @app.exception(SanicException)
 @app.exception(Exception)
 async def exception_handler(request, exception):
+    logger.error(f'Exception: {exception} - {sys.exc_info()}')
     return json({'success': False, 'error': str(exception)}, status=500)
 
 if __name__ == '__main__':
     port = sys.argv[1] if len(sys.argv) > 1 else config['APP_PORT']
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, auto_reload=True)
