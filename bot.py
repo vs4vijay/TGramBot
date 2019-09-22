@@ -2,9 +2,10 @@ import os
 import sys
 import asyncio
 
-from telethon.errors import FloodWaitError
-from telethon.sessions import StringSession, MemorySession
 from telethon import TelegramClient, events, sync
+from telethon.sessions import StringSession, MemorySession
+from telethon.tl.functions.messages import SendMessageRequest
+from telethon.errors import FloodWaitError, MultiError, RPCError
 from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
 
 from logger import logger
@@ -60,15 +61,41 @@ class Bot:
 
     async def send_bulk_message(self, usernames, message):
         try:
-            await asyncio.wait([
-                self.client.send_message(username, message) for username in usernames
-            ])
+            # await self.client.send_message(usernames[0], message)
+            # await asyncio.wait([
+            #     self.client.send_message(username, message) for username in usernames
+            # ])
+            await self.client([
+                SendMessageRequest(username, message) for username in usernames
+            ], ordered=True)
         except FloodWaitError as e:
-            logger.error(e)
+            logger.error(f'FloodWaitError: {e} {sys.exc_info()}')
             # TODO: Notify
+            return { 'error': str(e) }
+        except MultiError as e:
+            logger.error(f'----- MultiError: {e} - {sys.exc_info()}')
+            print('^^^^^^ Result ')
+            print(e.results)
+            print('^^^^^^ exceptions ')
+            print(e.exceptions)
+
+            output = {}
+            for index in range(len(usernames)):
+                username = usernames[index]
+                result = e.results[index]
+                if(result):
+                    output[username] = { 'sent': True, 'result': result }
+                else:
+                    error = e.exceptions[index]
+                    output[username] = { 'sent': False, 'error': str(error) }
+            return output
         except Exception as e:
-            logger.error(e)
-            return None
+            logger.error(f'---- Exception: {e} - {sys.exc_info()}')
+
+            output = {}
+            for username in usernames:
+                output[username] = { 'sent': False, 'error': str(e) }
+            return output
 
     async def get_channel(self, channel):
         try:
@@ -85,7 +112,7 @@ class Bot:
                 ch_joined = await self.client(JoinChannelRequest(ch['channel']))
                 if(len(ch_joined.updates) is not 0):
                     logger.info(f'(Channel:{channel}) Joined')
-                return { 'joined': ch_joined}
+                return { 'joined': True}
             except Exception as e:
                 logger.error(f'({channel}) {e} {sys.exc_info()}')
                 return { 'error': str(e) }
@@ -108,11 +135,24 @@ class Bot:
             else:
                 results[channel] = { 'error': ch.get('error') }
         
-        joined_channels = filter(lambda channel: results['joined'] == True, channels)
+        joined_channels = filter(lambda channel: results[channel].get('joined') == True, channels)
+        joined_channels = list(joined_channels)
+
+        logger.info(f'joined_channels: {joined_channels}')
+
+        if(len(joined_channels) > 0):
+            try:
+                data = await self.send_bulk_message(joined_channels, message)
+                print('--------- join_channels_and_send_message')
+                print(data)
+                for channel in joined_channels:
+                    results[channel].update(data[channel])
+            except Exception as e:
+                logger.error(f'{e} - {sys.exc_info()}')
+                data = e
+        else:
+            logger.info('No channels joined')
 
         # Sending the messages
-        data = await self.send_bulk_message(channels, message)
-        print('--------- join_channels_and_send_message')
-        print(data)
-        return data
+        return results
         

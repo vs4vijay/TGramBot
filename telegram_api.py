@@ -117,12 +117,13 @@ async def send_messages(request):
 
     results = await bot.join_channels_and_send_message(channels, message)
 
+    is_success = len(list(filter(lambda channel: results[channel].get('error') is not None, channels))) is 0
+
     data = {
-        'success': True,
+        'success': is_success,
         'data': {
-            'channels': channels,
             'message': message,
-            'results': results
+            'channels': results
         }
     }
     return json(data)
@@ -215,4 +216,5 @@ async def before_server_start(app, loop):
 @telegram_bp.listener('after_server_stop')
 async def after_server_stop(app, loop):
     logger.info('Stopping Telegram Client')
-    await bot.client.disconnect()
+    if(bot):
+        await bot.client.disconnect()
