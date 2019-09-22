@@ -104,9 +104,6 @@ async def send_messages(request):
         data['error'] = 'No channels or message are specified'
         return json(data, status=400)
 
-    me = await bot.me()
-    logger.info(f'Me: {me.first_name} {me.last_name}: ID:{me.id}')
-
     channels = channels.split(',')
 
     # channel = channels[0]
