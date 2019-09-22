@@ -15,5 +15,3 @@ config = {
     'MESSAGE': os.getenv('MESSAGE'),
     'TEST_SERVER': os.getenv('TEST_SERVER')
 }
-
-print(config)

@@ -108,6 +108,9 @@ server {
     }
 }
 
+# handler = logging.StreamHandler()
+# logger.addHandler(handler)
+
 - 
 Auto Reload
 Dockerize: `python:3.7.4-slim-stretch`, `python:3.7.4-alpine3.9`

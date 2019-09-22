@@ -47,13 +47,12 @@ async def session_initiate(request):
         'APP_ENV': config['APP_ENV'],
         'TEST_SERVER': config['TEST_SERVER']
     }
-    logger.info(bot_config)
     bot = Bot(bot_config)
 
     loop = asyncio.get_event_loop()
     bot.client = await bot.start(loop)
 
-    return json({'success': True})
+    return json({ 'success': True, 'data': 'If you have received the code on telegram, use /sessions/start?code=<code> API to start the session' })
 
 @telegram_bp.route('/sessions/start')
 @doc.summary('Start a session with code received on telegram app')
@@ -63,7 +62,7 @@ async def session_start(request):
 
     if(code):
         logger.info(f'Starting a session with code: {code}')
-        bot.client.sign_in(code=code)
+        await bot.client.sign_in(code=code)
     else:
         return json({'success': False, 'error': 'code is required'}, status=400)
     
@@ -105,12 +104,6 @@ async def send_messages(request):
         return json(data, status=400)
 
     channels = channels.split(',')
-
-    # channel = channels[0]
-    # ch = await bot.join_channel(channel)
-    # if(ch is None):
-    #     data['error'] = f'Couldn\'t find or join channel {channel}'
-    #     return json(data, status=400)
 
     results = await bot.join_channels_and_send_message(channels, message)
 

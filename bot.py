@@ -21,15 +21,19 @@ class Bot:
         self.client = TelegramClient(self.config['APP_SESSION'], self.config['API_KEY'], self.config['API_HASH'], loop=loop)
         # self.client.session.save_entities = False
 
-        print("self.config['APP_ENV']", self.config['APP_ENV'])
-
         if(self.config['APP_ENV'] == 'test'):
             logger.info('======== Connecting to Testing Server =========')
             self.client.session.set_dc(2, self.config['TEST_SERVER'], 80)
             await self.client.start(phone=self.config['PHONE'] or '9996629999', code_callback=lambda: '22222')
         else:
-            logger.info('else block')
-            await self.client.start(phone=self.config['PHONE'])
+            if not self.client.is_connected():
+                logger.info('Client not connected, connecting now!')
+                await self.client.connect()
+            
+            if not await self.client.is_user_authorized():
+                logger.info('User not authorized, trying')
+                # await self.client.connect()
+                await self.client.send_code_request(phone=self.config['PHONE'])
             
         client = self.client
 
@@ -43,7 +47,6 @@ class Bot:
 
     async def me(self):
         me = await self.client.get_me()
-        logger.info(f'[ME] {me}')
         return me
 
     async def get_all_conversations(self):
@@ -53,7 +56,6 @@ class Bot:
     async def send_message(self, username, message):
         try:
             message = await self.client.send_message(username, message)
-            logger.info(message)
             return message
         except Exception as e:
             logger.error(f'({username}) {e}')
@@ -73,11 +75,8 @@ class Bot:
             # TODO: Notify
             return { 'error': str(e) }
         except MultiError as e:
-            logger.error(f'----- MultiError: {e} - {sys.exc_info()}')
-            print('^^^^^^ Result ')
-            print(e.results)
-            print('^^^^^^ exceptions ')
-            print(e.exceptions)
+            logger.error(f'MultiError: {e} - {sys.exc_info()}')
+            # Success results are stored in "e.results", errors are stored in "e.exceptions"
 
             output = {}
             for index in range(len(usernames)):
@@ -90,7 +89,7 @@ class Bot:
                     output[username] = { 'sent': False, 'error': str(error) }
             return output
         except Exception as e:
-            logger.error(f'---- Exception: {e} - {sys.exc_info()}')
+            logger.error(f'Exception: {e} - {sys.exc_info()}')
 
             output = {}
             for username in usernames:
@@ -143,8 +142,6 @@ class Bot:
         if(len(joined_channels) > 0):
             try:
                 data = await self.send_bulk_message(joined_channels, message)
-                print('--------- join_channels_and_send_message')
-                print(data)
                 for channel in joined_channels:
                     results[channel].update(data[channel])
             except Exception as e:
@@ -152,7 +149,5 @@ class Bot:
                 data = e
         else:
             logger.info('No channels joined')
-
-        # Sending the messages
         return results
         
