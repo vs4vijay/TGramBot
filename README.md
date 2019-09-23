@@ -1,13 +1,35 @@
 TGramBot
 ===
 
-A Telegram Bot Command Center to send messages to list of channels
+A Telegram Bot Control Center to send messages to list of channels
 
 
-## Pre-requisite
+## Pre-requisites
 
 - Python 3
-- Get API Credentials(API_KEY and API_HASH): https://my.telegram.org
+- API Credentials (API_KEY and API_HASH): https://my.telegram.org
+
+---
+
+## Flow
+
+- Obtain API_KEY and API_HASH from https://my.telegram.org
+- Use /sessions/initiate API Call to Initiate the session
+  - This API Accepts: `api_key, api_hash, session, phone` as query parameters
+  - Once this is successful, telegram server will send a "code" on the "phone" no. specified
+- Use /sessions/start API Call to Start the session
+  - This API Accepts: `code` as query parameter
+  - If this is successful, we can start using APIs to send messages
+- Use /channels/join API to join list of channels
+  - This API Accepts: `channels` parameters as comma separated list in query parameter
+- Use /messages/send API to send messages to the list of channels
+  - This API Accepts: `channels` and `message` parameters in query parameter
+
+---
+
+## API Docs
+
+- `/api/docs` URL contains the API Docs
 
 ---
 
@@ -30,8 +52,6 @@ A Telegram Bot Command Center to send messages to list of channels
 - Gunicorn
   - `gunicorn server:app --bind 0.0.0.0:9090 --worker-class sanic.worker.GunicornWorker`
 
-
-
 ---
 
 ## Deployment
@@ -53,6 +73,31 @@ A Telegram Bot Command Center to send messages to list of channels
 - DigitalOcean - https://marketplace.digitalocean.com/apps/docker
 - scalingo.com - No
 
+Ref: https://blog.codeship.com/the-shortlist-of-docker-hosting/
+
+---
+
+## To Do
+- [x] Functionality using Command Line
+- [x] Functionality using HTTP APIs (Sanic)
+  - [ ] Change some APIs to `POST, DELETE` HTTP Methods
+- [x] Auto Reload of App when any code changes (`--reload` option)
+- [x] Dockerize the app
+- [x] Kubernetes Deployment of the app (`/deploy` folder)
+- [x] OpenAPI Specs
+- [ ] Authentication Support - `https://sanic-jwt.readthedocs.io/en/latest/pages/simpleusage.html`
+- [ ] Feeds API with Socker Streaming Support 
+- [ ] Have a better folder and filer structure
+- [ ] UI
+  - [ ] CLI - `python main.py`
+      - `https://github.com/google/python-fire`
+  - [ ] Web UI
+  - [ ] GUI - `https://github.com/chriskiehl/Gooey`
+  - [ ] TUI - Using ncurses
+- [ ] Serve with nginx - `https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04`
+- [ ] Integrate with Error Tracking Services like Rollbar, Sentry
+  - https://github.com/serathius/sanic-sentry
+
 ---
 
 ### Development Notes
@@ -62,7 +107,6 @@ A Telegram Bot Command Center to send messages to list of channels
 - Docker
 
 ```
-
 
 Test Server: 149.154.167.40:443
 
@@ -77,17 +121,13 @@ https://telegramchannels.me
 https://tlgrm.eu/channels/language
 
 
-
-
- https://sanic.readthedocs.io/en/latest/sanic/blueprints.html
-
- if __name__ == ‘__main__’:
- context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH)
- context.load_cert_chain(“./.ssl/name_of_cert_file.crt”, keyfile=”./.ssl/name_of_key_file.key”)app.go_fast(host=”0.0.0.0", port=8443, ssl=context, workers=os.cpu_count(), debug=True)
+if __name__ == ‘__main__’:
+context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH)
+context.load_cert_chain(“./.ssl/name_of_cert_file.crt”, keyfile=”./.ssl/name_of_key_file.key”)app.go_fast(host=”0.0.0.0", port=8443, ssl=context, workers=os.cpu_count(), debug=True)
 
 from functools import wraps
 
- def check_request_for_authorization_status(request):
+def check_request_for_authorization_status(request):
     # Note: Define your check, for instance cookie, session.
     flag = True
     return flag
@@ -137,18 +177,5 @@ server {
 # logger.addHandler(handler)
 
 ---
-Auto Reload
-Dockerize: `python:3.7.4-slim-stretch`, `python:3.7.4-alpine3.9`
-Kubernetes
-UI
-Structure
-HTTP Methods
-
-https://sanic-jwt.readthedocs.io/en/latest/pages/simpleusage.html
-
-https://blog.codeship.com/the-shortlist-of-docker-hosting/
-
-https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04
-
 
 ```
