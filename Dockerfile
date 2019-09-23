@@ -14,8 +14,8 @@ COPY . ./
 
 ENV PORT 9090
 
-EXPOSE ${PORT}
+EXPOSE $PORT
 
-ENTRYPOINT [ "python", "server.py" ]
+ENTRYPOINT [ "python3", "server.py" ]
 
 CMD $PORT
