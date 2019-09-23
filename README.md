@@ -13,16 +13,16 @@ A Telegram Bot Control Center to send messages to list of channels
 
 ## Flow
 
-- Obtain API_KEY and API_HASH from https://my.telegram.org
-- Use /sessions/initiate API Call to Initiate the session
-  - This API Accepts: `api_key, api_hash, session, phone` as query parameters
+- Obtain `api_key` and `api_hash` from https://my.telegram.org
+- Use `/sessions/initiate` API Call to Initiate the session
+  - This API Accepts: `api_key, , session, phone` as query parameters
   - Once this is successful, telegram server will send a "code" on the "phone" no. specified
-- Use /sessions/start API Call to Start the session
+- Use `/sessions/start` API Call to Start the session
   - This API Accepts: `code` as query parameter
   - If this is successful, we can start using APIs to send messages
-- Use /channels/join API to join list of channels
+- Use `/channels/join` API to join list of channels
   - This API Accepts: `channels` parameters as comma separated list in query parameter
-- Use /messages/send API to send messages to the list of channels
+- Use `/messages/send` API to send messages to the list of channels
   - This API Accepts: `channels` and `message` parameters in query parameter
 
 ---
@@ -72,6 +72,8 @@ A Telegram Bot Control Center to send messages to list of channels
 - now.sh - Nope
 - DigitalOcean - https://marketplace.digitalocean.com/apps/docker
 - scalingo.com - No
+- pythonanywhere.com
+- codenvy - Python version issue
 
 Ref: https://blog.codeship.com/the-shortlist-of-docker-hosting/
 
