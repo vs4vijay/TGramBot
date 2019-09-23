@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-import asyncio
 from sanic import Sanic
 from sanic.response import json
 from sanic.exceptions import NotFound, SanicException
@@ -45,7 +44,6 @@ async def exception_handler(request, exception):
     return json({'success': False, 'error': str(exception)}, status=500)
 
 if __name__ == '__main__':
-    port = sys.argv[1] if len(sys.argv) > 1 else config['PORT']
-    # port = config['PORT']
+    port = config['PORT']
     # TODO: access_log=False, debug=False in production
     app.run(host='0.0.0.0', port=port, auto_reload=True)

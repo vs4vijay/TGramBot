@@ -7,7 +7,7 @@ A Telegram Bot Control Center to send messages to list of channels
 ## Pre-requisites
 
 - Python 3
-- API Credentials (API_KEY and API_HASH): https://my.telegram.org
+- API Credentials (`api_key` and `api_hash`): https://my.telegram.org
 
 ---
 
@@ -15,7 +15,7 @@ A Telegram Bot Control Center to send messages to list of channels
 
 - Obtain `api_key` and `api_hash` from https://my.telegram.org
 - Use `/sessions/initiate` API Call to Initiate the session
-  - This API Accepts: `api_key, , session, phone` as query parameters
+  - This API Accepts: `api_key, api_hash, session, phone` as query parameters
   - Once this is successful, telegram server will send a "code" on the "phone" no. specified
 - Use `/sessions/start` API Call to Start the session
   - This API Accepts: `code` as query parameter
@@ -23,6 +23,7 @@ A Telegram Bot Control Center to send messages to list of channels
 - Use `/channels/join` API to join list of channels
   - This API Accepts: `channels` parameters as comma separated list in query parameter
 - Use `/messages/send` API to send messages to the list of channels
+  - This API is flexible, if channels are not joined, then it will try to join the channel first
   - This API Accepts: `channels` and `message` parameters in query parameter
 
 ---
