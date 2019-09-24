@@ -31,7 +31,7 @@ app.config['API_SECURITY_DEFINITIONS'] = { 'ApiKeyAuth': {'type': 'apiKey', 'in'
 
 @app.route('/')
 async def index(request):
-    return json({'success': True, 'data': 'API Docs at /api/docs'})
+    return json({'success': True, 'data': f'API docs are at {swagger_blueprint.url_prefix}'})
 
 @app.exception(NotFound)
 async def not_found_handler(request, exception):

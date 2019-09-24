@@ -15,16 +15,18 @@ class Bot:
     def __init__(self, config):
         self.config = config
 
-    async def start(self, loop=None):
+    async def initiate(self, loop=None):
         # self.session = MemorySession(config['APP_SESSION'])
         # self.session = MemorySession()
         self.client = TelegramClient(self.config['APP_SESSION'], self.config['API_KEY'], self.config['API_HASH'], loop=loop)
-        # self.client.session.save_entities = False
+        self.client.session.save_entities = False
+        session = StringSession.save(self.client.session)
+        logger.info(f'----- SESSION Initiate: {session}')
 
         if(self.config['APP_ENV'] == 'test'):
             logger.info('======== Connecting to Testing Server =========')
             self.client.session.set_dc(2, self.config['TEST_SERVER'], 80)
-            await self.client.start(phone=self.config['PHONE'] or '9996629999', code_callback=lambda: '22222')
+            await self.client.start(phone='9996629999', code_callback=lambda: '22222')
         else:
             if not self.client.is_connected():
                 logger.info('Client not connected, connecting now!')
@@ -33,7 +35,10 @@ class Bot:
             if not await self.client.is_user_authorized():
                 logger.info('User not authorized, trying')
                 # await self.client.connect()
-                await self.client.send_code_request(phone=self.config['PHONE'])
+                if(self.config['CODE'] is not None):
+                    await self.sign_in(phone=self.config['PHONE'], code=self.config['CODE'])
+                else:
+                    await self.client.send_code_request(phone=self.config['PHONE'])
             
         client = self.client
 
@@ -44,6 +49,19 @@ class Bot:
             # await event.reply(event.text)
 
         return self.client
+
+    async def sign_in(self, phone, code):
+        if not self.client.is_connected():
+            logger.info('Client not connected, connecting now!')
+            await self.client.connect()
+            
+        # if not await self.client.is_user_authorized():
+        #     logger.info('User not authorized, trying')
+        
+        await self.client.sign_in(phone=phone, code=code)
+        session = StringSession.save(self.client.session)
+        logger.info(f'----- SESSION Sign in: {session}')
+
 
     async def me(self):
         me = await self.client.get_me()

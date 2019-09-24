@@ -44,13 +44,14 @@ async def session_initiate(request):
         'PHONE': request.args.get('phone') or config['PHONE'],
         'API_KEY': request.args.get('api_key') or config['API_KEY'],
         'API_HASH': request.args.get('api_hash') or config['API_HASH'],
+        'CODE': request.args.get('code'),
         'APP_ENV': config['APP_ENV'],
         'TEST_SERVER': config['TEST_SERVER']
     }
     bot = Bot(bot_config)
 
     loop = asyncio.get_event_loop()
-    bot.client = await bot.start(loop)
+    bot.client = await bot.initiate(loop)
 
     return json({ 'success': True, 'data': 'If you have received the code on telegram, use /sessions/start?code=<code> API to start the session' })
 
@@ -58,14 +59,15 @@ async def session_initiate(request):
 @doc.summary('Start a session with code received on telegram app')
 @doc.consumes(doc.String(name='code'), location='query')
 async def session_start(request):
+    phone = request.args.get('phone')
     code = request.args.get('code')
 
-    if(code):
-        logger.info(f'Starting a session with code: {code}')
-        await bot.client.sign_in(code=code)
+    if(phone is None or code is None):
+        return json({'success': False, 'error': 'phone and code is required'}, status=400)
     else:
-        return json({'success': False, 'error': 'code is required'}, status=400)
-    
+        logger.info(f'Starting a session with code: {code}')
+        await bot.sign_in(phone=phone, code=code)
+        
     return json({'success': True})
 
 @telegram_bp.route('/me')

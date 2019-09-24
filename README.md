@@ -39,7 +39,7 @@ A Telegram Bot Control Center to send messages to list of channels
 ### Run with Docker
 
 - `docker build -t tgram-bot .`
-- `docker run -p 9999:9090 tgram-bot`
+- `docker run -p 9090:9090 tgram-bot`
 
 ---
 
@@ -84,7 +84,7 @@ Ref: https://blog.codeship.com/the-shortlist-of-docker-hosting/
 - [x] Functionality using Command Line
 - [x] Functionality using HTTP APIs (Sanic)
   - [ ] Change some APIs to `POST, DELETE` HTTP Methods
-- [x] Auto Reload of App when any code changes (`--reload` option)
+- [x] Auto Reload of App when any code changes (`auto_reload=True` option)
 - [x] Dockerize the app
 - [x] Kubernetes Deployment of the app (`/deploy` folder)
 - [x] OpenAPI Specs
@@ -100,6 +100,7 @@ Ref: https://blog.codeship.com/the-shortlist-of-docker-hosting/
 - [ ] Serve with nginx - `https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04`
 - [ ] Integrate with Error Tracking Services like Rollbar, Sentry
   - https://github.com/serathius/sanic-sentry
+- [ ] Make pip module
 
 ---
 
@@ -122,6 +123,11 @@ https://t.me/TelethonSnippets
 https://telegramchannels.me
 
 https://tlgrm.eu/channels/language
+
+https://t.me/PixelExperience
+
+https://t.me/xXx_OP6_Lounge
+
 
 
 if __name__ == ‘__main__’:
