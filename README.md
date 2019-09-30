@@ -15,10 +15,10 @@ A Telegram Bot Control Center to send messages to list of channels
 
 - Obtain `api_key` and `api_hash` from https://my.telegram.org
 - Use `/sessions/initiate` API Call to Initiate the session
-  - This API Accepts: `api_key, api_hash, session, phone` as query parameters
+  - This API Accepts: `api_key, api_hash, session`, and `phone` as query parameters
   - Once this is successful, telegram server will send a "code" on the "phone" no. specified
 - Use `/sessions/start` API Call to Start the session
-  - This API Accepts: `code` as query parameter
+  - This API Accepts: `phone` and `code` as query parameter
   - If this is successful, we can start using APIs to send messages
 - Use `/channels/join` API to join list of channels
   - This API Accepts: `channels` parameters as comma separated list in query parameter
@@ -96,6 +96,7 @@ Ref: https://blog.codeship.com/the-shortlist-of-docker-hosting/
       - `https://github.com/google/python-fire`
   - [ ] Web UI
   - [ ] GUI - `https://github.com/chriskiehl/Gooey`
+    - [ ] `https://wiki.python.org/moin/PyQt/Tutorials`
   - [ ] TUI - Using ncurses
 - [ ] Serve with nginx - `https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04`
 - [ ] Integrate with Error Tracking Services like Rollbar, Sentry

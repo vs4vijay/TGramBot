@@ -48,16 +48,27 @@ async def session_initiate(request):
         'APP_ENV': config['APP_ENV'],
         'TEST_SERVER': config['TEST_SERVER']
     }
+
     bot = Bot(bot_config)
 
     loop = asyncio.get_event_loop()
-    bot.client = await bot.initiate(loop)
+    data = await bot.initiate(loop)
 
-    return json({ 'success': True, 'data': 'If you have received the code on telegram, use /sessions/start?code=<code> API to start the session' })
+    bot.client = data['client']
+
+    response = {
+        'success': True
+    }
+    if(data['started']):
+        response['data'] = 'Session is started, you can start using the APIs'
+    else:
+        response['data'] = 'If you have received the code on telegram, use /sessions/start?code=<code> API to start the session'
+    
+    return json(response)
 
 @telegram_bp.route('/sessions/start')
 @doc.summary('Start a session with code received on telegram app')
-@doc.consumes(doc.String(name='code'), location='query')
+@doc.consumes(doc.String(name='phone'), doc.String(name='code'), location='query')
 async def session_start(request):
     phone = request.args.get('phone')
     code = request.args.get('code')
@@ -68,12 +79,12 @@ async def session_start(request):
         logger.info(f'Starting a session with code: {code}')
         await bot.sign_in(phone=phone, code=code)
         
-    return json({'success': True})
+    return json({'success': True, 'data': 'Session is started, you can start using the APIs'})
 
 @telegram_bp.route('/me')
 @doc.summary('Get Account info.')
 @doc.produces({'success': doc.Boolean, 'data': {}})
-async def send_messages(request):
+async def get_account_info(request):
 
     if(bot and await bot.client.is_user_authorized()):
         me = await bot.me()
@@ -124,7 +135,7 @@ async def send_messages(request):
 @doc.summary('Joins the list of channels')
 @doc.consumes(doc.String(name='channels'), location='query')
 @doc.produces({'success': doc.Boolean, 'data': {}})
-async def send_messages(request):
+async def join_channels(request):
     channels = request.args.get('channels')
 
     data = {
@@ -173,7 +184,7 @@ async def feeds(request):
 @telegram_bp.route('/conversations')
 @doc.summary('Get Conversations')
 @doc.produces({'success': doc.Boolean, 'data': { 'conversations': [] }})
-async def send_messages(request):
+async def get_conversations(request):
 
     if(bot and await bot.client.is_user_authorized()):
         conversations = await bot.get_all_conversations()

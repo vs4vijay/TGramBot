@@ -21,32 +21,40 @@ class Bot:
         self.client = TelegramClient(self.config['APP_SESSION'], self.config['API_KEY'], self.config['API_HASH'], loop=loop)
         self.client.session.save_entities = False
         session = StringSession.save(self.client.session)
-        logger.info(f'----- SESSION Initiate: {session}')
+        logger.info(f'SESSION Initiate: {session}')
 
-        if(self.config['APP_ENV'] == 'test'):
-            logger.info('======== Connecting to Testing Server =========')
-            self.client.session.set_dc(2, self.config['TEST_SERVER'], 80)
-            await self.client.start(phone='9996629999', code_callback=lambda: '22222')
+        response = {
+            'started': False,
+            'session': session,
+            'client': self.client
+        }
+
+        if(session is not None):
+            if(self.config['APP_ENV'] == 'test'):
+                logger.info('======== Connecting to Testing Server =========')
+                self.client.session.set_dc(2, self.config['TEST_SERVER'], 80)
+                await self.client.start(phone='9996629999', code_callback=lambda: '22222')
+            else:
+                if not self.client.is_connected():
+                    logger.info('Client not connected, connecting now!')
+                    await self.client.connect()
+                
+                if not await self.client.is_user_authorized():
+                    logger.info('User not authorized, trying')
+                    # await self.client.connect()
+                    if(self.config.get('CODE') is not None):
+                        await self.sign_in(phone=self.config['PHONE'], code=self.config.get('CODE'))
+                    else:
+                        await self.client.send_code_request(phone=self.config['PHONE'])
         else:
-            if not self.client.is_connected():
-                logger.info('Client not connected, connecting now!')
-                await self.client.connect()
-            
-            if not await self.client.is_user_authorized():
-                logger.info('User not authorized, trying')
-                # await self.client.connect()
-                if(self.config['CODE'] is not None):
-                    await self.sign_in(phone=self.config['PHONE'], code=self.config['CODE'])
-                else:
-                    await self.client.send_code_request(phone=self.config['PHONE'])
-            
-        client = self.client
+            response['started'] = True
 
-        @client.on(events.NewMessage)
-        async def echo_all(event):
-            # logger.info(event)
-            logger.info(f'[Received] {event.text}')
-            # await event.reply(event.text)
+        # client = self.client
+        # @client.on(events.NewMessage)
+        # async def echo_all(event):
+        #     # logger.info(event)
+        #     logger.info(f'[Received] {event.text}')
+        #     # await event.reply(event.text)
 
         return self.client
 
@@ -54,14 +62,10 @@ class Bot:
         if not self.client.is_connected():
             logger.info('Client not connected, connecting now!')
             await self.client.connect()
-            
-        # if not await self.client.is_user_authorized():
-        #     logger.info('User not authorized, trying')
         
-        await self.client.sign_in(phone=phone, code=code)
+        await self.client.sign_in(phone=phone, phone_code_hash=code)
         session = StringSession.save(self.client.session)
-        logger.info(f'----- SESSION Sign in: {session}')
-
+        logger.info(f'SESSION Sign in: {session}')
 
     async def me(self):
         me = await self.client.get_me()
@@ -155,7 +159,7 @@ class Bot:
         joined_channels = filter(lambda channel: results[channel].get('joined') == True, channels)
         joined_channels = list(joined_channels)
 
-        logger.info(f'joined_channels: {joined_channels}')
+        logger.info(f'Joined Channels: {joined_channels}')
 
         if(len(joined_channels) > 0):
             try:
@@ -168,4 +172,3 @@ class Bot:
         else:
             logger.info('No channels joined')
         return results
-        
