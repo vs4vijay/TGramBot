@@ -5,7 +5,6 @@ import sys
 import signal
 import asyncio
 
-# from quamash import QEventLoop, QThreadExecutor
 from asyncqt import QEventLoop, asyncSlot, asyncClose
 from PyQt5 import QtCore, QtGui, uic
 from PyQt5.QtWidgets import *

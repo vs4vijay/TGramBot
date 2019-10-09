@@ -153,7 +153,7 @@ class Bot:
 
     async def join_channels_and_send_message(self, channels, message):
         # Joining the channels
-        # [await self.join_channel(channel) for channel in channels]
+        [await self.join_channel(channel) for channel in channels]
         results = {}
         for channel in channels:
             ch = await self.join_channel(channel)

@@ -89,15 +89,17 @@ Ref: https://blog.codeship.com/the-shortlist-of-docker-hosting/
 - [x] Kubernetes Deployment of the app (`/deploy` folder)
 - [x] OpenAPI Specs
 - [ ] Authentication Support - `https://sanic-jwt.readthedocs.io/en/latest/pages/simpleusage.html`
-- [ ] Feeds API with Socker Streaming Support 
+- [ ] Feeds API with Socket Streaming Support 
 - [ ] Have a better folder and filer structure
-- [ ] UI
-  - [ ] CLI - `python main.py`
-      - `https://github.com/google/python-fire`
-  - [ ] Web UI
-  - [ ] GUI - `https://github.com/chriskiehl/Gooey`
-    - [ ] `https://wiki.python.org/moin/PyQt/Tutorials`
-  - [ ] TUI - Using ncurses
+- [ ] CLI - `python main.py`
+    - `https://github.com/google/python-fire`
+- [x] API - Done using Sanic
+- [ ] Web UI
+- [x] GUI 
+  - [ ] Gooey - `https://github.com/chriskiehl/Gooey`
+  - [x] Using PyQt and QtCreator `https://wiki.python.org/moin/PyQt/Tutorials`
+- [ ] TUI - Using ncurses
+- [ ] Package app into a executable
 - [ ] Serve with nginx - `https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04`
 - [ ] Integrate with Error Tracking Services like Rollbar, Sentry
   - https://github.com/serathius/sanic-sentry
@@ -196,6 +198,8 @@ pyuic4 -x test.ui -o test.py
 
 ```
 
+    pip3 install PyQt5==5.11.3
+
     # self.setWindowIcon(QtGui.QIcon("icon.png"))
     # self.resize(500,650)
     # self.setMinimumSize(500,650)
@@ -231,5 +235,13 @@ pyuic4 -x test.ui -o test.py
 
 
     # async with data_future as data:
+
+
+
+    pip install pyinstaller
+
+    pyinstaller --onefile --windowed app.py
+
+    pyinstaller app.py
 
 ```
