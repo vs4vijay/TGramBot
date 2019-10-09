@@ -4,9 +4,9 @@ import sys
 import signal
 import asyncio
 
-from bot import Bot
-from config import config
-from logger import logger
+from telegram.core.bot import Bot
+from telegram.core.config import config
+from telegram.core.logger import logger
 
 print(config)
 

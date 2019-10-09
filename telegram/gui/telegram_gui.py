@@ -9,17 +9,18 @@ from asyncqt import QEventLoop, asyncSlot, asyncClose
 from PyQt5 import QtCore, QtGui, uic
 from PyQt5.QtWidgets import *
 
-from config import config
-from logger import logger
-from bot import Bot
+from telegram.core.config import config
+from telegram.core.logger import logger
+from telegram.core.bot import Bot
 
 bot = None
 
-class TGramBot(QWidget):
+
+class TelegramGUI(QWidget):
 
     def __init__(self, loop=None):
         super().__init__()
-        uic.loadUi('desktop_gui/form.ui', self)
+        uic.loadUi('telegram/gui/ui/form.ui', self)
         self.loop = loop
         self.init_components()
 
@@ -273,14 +274,17 @@ class TGramBot(QWidget):
 # Handler Ctrl+C
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-if __name__ == '__main__':
+def main_gui():
     app = QApplication(sys.argv)
 
     loop = QEventLoop(app)
     asyncio.set_event_loop(loop)
 
-    ex = TGramBot(loop)
+    ex = TelegramGUI(loop)
     ex.show()
 
     with loop:
         sys.exit(loop.run_forever())
+
+if __name__ == '__main__':
+    main_gui()

@@ -1,12 +1,13 @@
 import asyncio
 import datetime as dt
+
 from sanic import Blueprint
 from sanic.response import json, stream
 from sanic_openapi import doc
 
-from bot import Bot
-from config import config
-from logger import logger
+from telegram.core.bot import Bot
+from telegram.core.config import config
+from telegram.core.logger import logger
 
 
 telegram_bp = Blueprint('telegram_api', url_prefix='/api/v1/telegram')

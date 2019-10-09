@@ -90,7 +90,7 @@ Ref: https://blog.codeship.com/the-shortlist-of-docker-hosting/
 - [x] OpenAPI Specs
 - [ ] Authentication Support - `https://sanic-jwt.readthedocs.io/en/latest/pages/simpleusage.html`
 - [ ] Feeds API with Socket Streaming Support 
-- [ ] Have a better folder and filer structure
+- [x] Have a better folder and filer structure
 - [ ] CLI - `python main.py`
     - `https://github.com/google/python-fire`
 - [x] API - Done using Sanic
@@ -189,6 +189,13 @@ server {
 # logger.addHandler(handler)
 
 pyuic4 -x test.ui -o test.py 
+
+
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+
 
 ```
 

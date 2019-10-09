@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
 import sys
+
 from sanic import Sanic
 from sanic.response import json
 from sanic.exceptions import NotFound, SanicException
 from sanic_openapi import swagger_blueprint
 
-from config import config
-from logger import logger
-from telegram_api import telegram_bp
+from telegram.core.config import config
+from telegram.core.logger import logger
+from telegram.api.telegram_api import telegram_bp
 
 
 app = Sanic()
@@ -43,7 +44,9 @@ async def exception_handler(request, exception):
     logger.error(f'Exception: {exception} - {sys.exc_info()}')
     return json({'success': False, 'error': str(exception)}, status=500)
 
-if __name__ == '__main__':
-    port = config['PORT']
+def main_api(port = config['PORT']):
     # TODO: access_log=False, debug=False in production
     app.run(host='0.0.0.0', port=port, auto_reload=True)
+
+if __name__ == '__main__':
+    main_api()

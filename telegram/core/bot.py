@@ -8,7 +8,7 @@ from telethon.tl.functions.messages import SendMessageRequest
 from telethon.errors import FloodWaitError, MultiError, RPCError
 from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
 
-from logger import logger
+from telegram.core.logger import logger
 
 class Bot:
 

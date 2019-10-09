@@ -2,9 +2,14 @@
 
 import sys
 
-from server import app
-from config import config
+from telegram.core.config import config
+from telegram.gui.telegram_gui import main_gui
+from telegram.api.server import main_api
 
 if __name__ == '__main__':
-    port = sys.argv[1] if len(sys.argv) > 1 else config['PORT']
-    app.run(host='0.0.0.0', port=port, auto_reload=True)
+    # API Server
+    # port = sys.argv[1] if len(sys.argv) > 1 else config['PORT']
+    # main_api(port=port)
+
+    # GUI App
+    main_gui()
