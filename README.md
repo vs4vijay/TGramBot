@@ -186,6 +186,50 @@ server {
 # handler = logging.StreamHandler()
 # logger.addHandler(handler)
 
+pyuic4 -x test.ui -o test.py 
+
+```
+
 ---
+
+### GUI
+
+```
+
+    # self.setWindowIcon(QtGui.QIcon("icon.png"))
+    # self.resize(500,650)
+    # self.setMinimumSize(500,650)
+    # self.center()
+    
+    # --- Menu --- #
+    open = QAction("Exit", self)
+    save = QAction("Save", self)
+    build = QAction("Build", self)
+    exit = QAction("Quit", self)
+    
+    menu_bar = QMenuBar()
+    file1 = menu_bar.addMenu("&File")
+    help = menu_bar.addMenu("&Help")
+    
+    file1.addAction(open)
+    file1.addAction(save)
+    file1.addAction(build)
+
+
+
+    self.tab_widget.setTabPosition(QTabWidget.TabPosition.West)
+    self.tab_widget.setTabShape(QTabWidget.TabShape.Triangular)
+
+
+
+
+    # data = loop.run_until_complete(bot.initiate(self.loop))
+    # done, pending = loop.run_until_complete(asyncio.wait(await bot.initiate(self.loop)))
+    # for future in done:
+    #     data = future.result()
+    #     print(data)
+
+
+    # async with data_future as data:
 
 ```

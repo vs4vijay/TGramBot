@@ -29,7 +29,7 @@ class Bot:
             'client': self.client
         }
 
-        if(session is not None):
+        if(session is ''):
             if(self.config['APP_ENV'] == 'test'):
                 logger.info('======== Connecting to Testing Server =========')
                 self.client.session.set_dc(2, self.config['TEST_SERVER'], 80)
@@ -47,6 +47,8 @@ class Bot:
                     else:
                         await self.client.send_code_request(phone=self.config['PHONE'])
         else:
+            print(f'------ initiate else {session}')
+            await self.client.start(phone=self.config['PHONE'])
             response['started'] = True
 
         # client = self.client
@@ -56,14 +58,14 @@ class Bot:
         #     logger.info(f'[Received] {event.text}')
         #     # await event.reply(event.text)
 
-        return self.client
+        return response
 
     async def sign_in(self, phone, code):
         if not self.client.is_connected():
             logger.info('Client not connected, connecting now!')
             await self.client.connect()
         
-        await self.client.sign_in(phone=phone, phone_code_hash=code)
+        await self.client.sign_in(phone=phone, code=code)
         session = StringSession.save(self.client.session)
         logger.info(f'SESSION Sign in: {session}')
 
@@ -128,7 +130,10 @@ class Bot:
     
     async def join_channel(self, channel):
         ch = await self.get_channel(channel)
+        print(f'ch: {channel}')
+        print(ch)
         if(ch and ch.get('channel')):
+            print('if')
             try:
                 ch_joined = await self.client(JoinChannelRequest(ch['channel']))
                 if(len(ch_joined.updates) is not 0):
@@ -138,6 +143,7 @@ class Bot:
                 logger.error(f'({channel}) {e} {sys.exc_info()}')
                 return { 'error': str(e) }
         else:
+            print('else')
             return { 'error': ch.get('error') }
     
     async def leave_channel(self, channel):
