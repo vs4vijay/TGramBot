@@ -198,9 +198,10 @@ class TelegramGUI(QWidget):
     @asyncSlot()
     async def join_channels(self):
         logger.info('join_channels')
+
         channels_str = self.input_channels.toPlainText().strip()
         channels = re.sub(r'\s+', ',', channels_str)
-        channels = channels.split(',') if channels else None
+        channels = [x.strip() for x in channels.split(',') if x.strip()]
         logger.info(f'join_channels: {channels}')
 
         if not channels:
@@ -217,7 +218,7 @@ class TelegramGUI(QWidget):
         self.table.setRowCount(len(results))
         for index, channel in enumerate(results):
             self.table.setItem(index, 0, QTableWidgetItem(channel))
-            self.table.setItem(index, 1, QTableWidgetItem(results.get(channel).get('joined') or 'Yes'))
+            self.table.setItem(index, 1, QTableWidgetItem('Yes' if results.get(channel).get('joined') else 'No'))
             self.table.setItem(index, 2, QTableWidgetItem(''))
             self.table.setItem(index, 3, QTableWidgetItem(results.get(channel).get('error')))
 
@@ -232,7 +233,7 @@ class TelegramGUI(QWidget):
 
         channels_str = self.input_channels_2.toPlainText().strip()
         channels = re.sub(r'\s+', ',', channels_str)
-        channels = channels.split(',') if channels else None
+        channels = [x.strip() for x in channels.split(',') if x.strip()]
 
         message = self.input_message.toPlainText().strip()
         logger.info(f'send_message: channels: {channels}, message: {message}')
@@ -248,8 +249,8 @@ class TelegramGUI(QWidget):
         self.table.setRowCount(len(results))
         for index, channel in enumerate(results):
             self.table.setItem(index, 0, QTableWidgetItem(channel))
-            self.table.setItem(index, 1, QTableWidgetItem(results.get(channel).get('joined') or 'Yes'))
-            self.table.setItem(index, 2, QTableWidgetItem(results.get(channel).get('sent') or 'Yes'))
+            self.table.setItem(index, 1, QTableWidgetItem('Yes' if results.get(channel).get('joined') else 'No'))
+            self.table.setItem(index, 2, QTableWidgetItem('Yes' if results.get(channel).get('sent') else 'No'))
             self.table.setItem(index, 3, QTableWidgetItem(results.get(channel).get('error')))
 
         # is_success = len(list(filter(lambda channel: results[channel].get('error') is not None, channels))) is 0

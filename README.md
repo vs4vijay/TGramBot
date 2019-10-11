@@ -11,6 +11,33 @@ A Telegram Bot Control Center to send messages to list of channels
 
 ---
 
+## Installation
+
+- `python3 -m pip install -r requirements.txt`
+
+---
+
+## Running the Desktop App
+
+- `python3 telegram/gui/telegram_gui.py`
+- OR
+- `python3 main.py`
+
+---
+
+## Running the API Server
+
+### Run with Python 3
+
+- `python3 telegram/api/server.py`
+
+### Run with Docker
+
+- `docker build -t tgram-bot .`
+- `docker run -p 9090:9090 tgram-bot`
+
+---
+
 ## Flow
 
 - Obtain `api_key` and `api_hash` from https://my.telegram.org
@@ -31,15 +58,6 @@ A Telegram Bot Control Center to send messages to list of channels
 ## API Docs
 
 - `/api/docs` URL contains the API Docs
-
----
-
-## Running
-
-### Run with Docker
-
-- `docker build -t tgram-bot .`
-- `docker run -p 9090:9090 tgram-bot`
 
 ---
 
@@ -99,7 +117,7 @@ Ref: https://blog.codeship.com/the-shortlist-of-docker-hosting/
   - [ ] Gooey - `https://github.com/chriskiehl/Gooey`
   - [x] Using PyQt and QtCreator `https://wiki.python.org/moin/PyQt/Tutorials`
 - [ ] TUI - Using ncurses
-- [ ] Package app into a executable
+- [x] Package app into a executable
 - [ ] Serve with nginx - `https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04`
 - [ ] Integrate with Error Tracking Services like Rollbar, Sentry
   - https://github.com/serathius/sanic-sentry
