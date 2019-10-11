@@ -10,6 +10,8 @@ from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelReque
 
 from telegram.core.logger import logger
 
+SESSION_FOLDER = 'sessions'
+
 class Bot:
 
     def __init__(self, config):
@@ -18,7 +20,8 @@ class Bot:
     async def initiate(self, loop=None):
         # self.session = MemorySession(config['APP_SESSION'])
         # self.session = MemorySession()
-        self.client = TelegramClient(self.config['APP_SESSION'], self.config['API_KEY'], self.config['API_HASH'], loop=loop)
+        session_file = f'{SESSION_FOLDER}/{self.config["APP_SESSION"]}'
+        self.client = TelegramClient(session_file, self.config['API_KEY'], self.config['API_HASH'], loop=loop)
         self.client.session.save_entities = False
         session = StringSession.save(self.client.session)
         logger.info(f'SESSION Initiate: {session}')

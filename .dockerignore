@@ -13,3 +13,6 @@ __pycache__
 *.log
 
 *.session*
+
+dist/
+build/

@@ -4,7 +4,7 @@ import sys
 
 from telegram.core.config import config
 from telegram.gui.telegram_gui import main_gui
-from telegram.api.server import main_api
+# from telegram.api.server import main_api
 
 if __name__ == '__main__':
     # API Server

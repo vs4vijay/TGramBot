@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv, find_dotenv
 
-load_dotenv(find_dotenv())
+# load_dotenv(find_dotenv('.env'))
 
 config = {
     'APP_ENV': os.getenv('APP_ENV') or 'dev',
