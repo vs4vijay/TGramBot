@@ -120,7 +120,7 @@ Ref: https://blog.codeship.com/the-shortlist-of-docker-hosting/
 - [x] Package app into a executable
 - [ ] Serve with nginx - `https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04`
 - [ ] Integrate with Error Tracking Services like Rollbar, Sentry
-  - https://github.com/serathius/sanic-sentry
+  - `https://github.com/serathius/sanic-sentry`
 - [ ] Make pip module
 
 ---
@@ -206,8 +206,6 @@ server {
 # handler = logging.StreamHandler()
 # logger.addHandler(handler)
 
-pyuic4 -x test.ui -o test.py 
-
 
 import os
 import sys
@@ -261,6 +259,11 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
     # async with data_future as data:
 
+
+
+    pyuic4 -x test.ui -o test.py 
+
+    pyuic5 mydesign.ui -o mydesign.py
 
 
     pip install pyinstaller

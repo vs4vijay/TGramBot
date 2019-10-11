@@ -103,6 +103,8 @@ class TelegramGUI(QWidget):
         self.table.setItem(0, 2, QTableWidgetItem('Message Sent or Failed'))
         self.table.setItem(0, 3, QTableWidgetItem('Error'))
 
+        self.table.resizeColumnsToContents()
+
     @asyncSlot()
     async def generate_code(self):
         logger.info('generate_code')
