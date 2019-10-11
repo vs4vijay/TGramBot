@@ -1,8 +1,11 @@
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv, find_dotenv
 
-# load_dotenv(find_dotenv('.env'))
+env_path = Path('.') / '.env'
+load_dotenv(dotenv_path=env_path)
+# load_dotenv(find_dotenv())
 
 config = {
     'APP_ENV': os.getenv('APP_ENV') or 'dev',
