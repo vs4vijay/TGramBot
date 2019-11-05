@@ -6,7 +6,7 @@ from telethon import TelegramClient, events, sync
 from telethon.sessions import StringSession, MemorySession
 from telethon.tl.functions.messages import SendMessageRequest
 from telethon.errors import FloodWaitError, MultiError, RPCError
-from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
+from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest, InviteToChannelRequest
 
 from telegram.core.logger import logger
 
@@ -123,6 +123,14 @@ class Bot:
                 output[username] = { 'sent': False, 'error': str(e) }
             return output
 
+    async def get_entity(self, name):
+        try:
+            entity = await self.client.get_entity(name)
+            return { 'entity': entity }
+        except Exception as e:
+            logger.error(f'({name}) {e} {sys.exc_info()}')
+            return { 'error': str(e) }
+
     async def get_channel(self, channel):
         try:
             ch = await self.client.get_entity(channel)
@@ -141,7 +149,7 @@ class Bot:
                 ch_joined = await self.client(JoinChannelRequest(ch['channel']))
                 if(len(ch_joined.updates) is not 0):
                     logger.info(f'(Channel:{channel}) Joined')
-                return { 'joined': True}
+                return { 'joined': True, 'channel': ch['channel'] }
             except Exception as e:
                 logger.error(f'({channel}) {e} {sys.exc_info()}')
                 return { 'error': str(e) }
@@ -156,7 +164,7 @@ class Bot:
 
     async def join_channels_and_send_message(self, channels, message):
         # Joining the channels
-        [await self.join_channel(channel) for channel in channels]
+        [ await self.join_channel(channel) for channel in channels ]
         results = {}
         for channel in channels:
             ch = await self.join_channel(channel)
@@ -180,4 +188,50 @@ class Bot:
                 data = e
         else:
             logger.info('No channels joined')
+        return results
+
+    async def invite_users(self, channels, users):
+        results = {}
+
+        for user in users:
+            entity = await self.get_entity(user)
+            if(entity.get('entity')):
+                results[user] = { 
+                    'type': 'user',
+                    'valid': True
+                }
+            else:
+                results[user] = { 
+                    'type': 'user',
+                    'error': entity.get('error')
+                }
+
+        valid_users = filter(lambda user: results[user].get('valid') == True, users)
+        valid_users = list(valid_users)
+
+        print('valid_users users')
+        print(valid_users)
+
+        # channels = [ channels[0] ] if channels else []
+
+        for channel in channels:
+            # Make sure channel is joined first
+            ch = await self.join_channel(channel)
+            if(ch.get('joined')):
+                results[channel] = {
+                    'type': 'channel',
+                    'joined': True
+                }
+                try:
+                    data = await self.client(InviteToChannelRequest(ch.get('channel'), valid_users))
+                except Exception as e:
+                    logger.error(f'{e} - {sys.exc_info()}')
+                    data = e
+                print('invite_users data: ')
+                print(data)
+            else:
+                results[channel] = {
+                    'type': 'channel',
+                    'error': ch.get('error') 
+                }
         return results
