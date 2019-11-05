@@ -259,6 +259,17 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
     # async with data_future as data:
 
+     # menubar = self.menuBar()
+        # fileMenu = menubar.addMenu('&File')
+        # fileMenu.addAction(exitAction)
+
+        exitAction = QtGui.QAction(QtGui.QIcon('exit24.png'), 'Exit', self)
+        exitAction.setShortcut('Ctrl+Q')
+        exitAction.triggered.connect(QtGui.qApp.quit)
+        
+        self.toolbar = self.addToolBar('Exit')
+        self.toolbar.addAction(exitAction)
+
 
 
     pyuic4 -x test.ui -o test.py 

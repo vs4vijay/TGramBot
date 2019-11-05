@@ -16,7 +16,7 @@ from telegram.core.bot import Bot
 bot = None
 
 
-class TelegramGUI(QWidget):
+class TelegramGUI(QMainWindow):
 
     def __init__(self, loop=None):
         super().__init__()
@@ -25,7 +25,6 @@ class TelegramGUI(QWidget):
         self.init_components()
 
     def init_components(self):
-
         self.tab_widget = self.findChild(QTabWidget, 'tabWidget')
         self.tab_widget.setTabEnabled(1, False)
         self.tab_widget.setTabEnabled(2, False)
@@ -53,6 +52,10 @@ class TelegramGUI(QWidget):
         # Input for Page 4
         self.input_channels_2 = self.findChild(QPlainTextEdit, 'input_channels_2')
         self.input_message = self.findChild(QPlainTextEdit, 'input_message')
+
+        # Input for Page 5 (Invite Users)
+        self.input_channels_invite_users = self.findChild(QPlainTextEdit, 'input_channels_invite_users')
+        self.input_users_invite_users = self.findChild(QPlainTextEdit, 'input_users_invite_users')
 
         # Buttons for Page 1
         self.btn_generate_code = self.findChild(QPushButton, 'btn_generate_code')
@@ -85,9 +88,30 @@ class TelegramGUI(QWidget):
         self.btn_sign_out_3 = self.findChild(QPushButton, 'btn_sign_out_3')
         self.btn_sign_out_3.clicked.connect(self.sign_out)
 
+        # Buttons for Page 5 (Invite Users)
+        self.btn_invite_users = self.findChild(QPushButton, 'btn_invite_users')
+        self.btn_invite_users.clicked.connect(self.invite_users)
+
+        self.btn_sign_out_invite_users = self.findChild(QPushButton, 'btn_sign_out_invite_users')
+        self.btn_sign_out_invite_users.clicked.connect(self.sign_out)
+
         # self.statusBar().showMessage('Offline')
 
+        self.init_menu()
         self.init_table()
+
+    def init_menu(self):
+        save = QAction('Save', self)
+        build = QAction('Build', self)
+        exit = QAction('Exit', self)
+        quit = QAction('Quit', self)
+        
+        menu_bar = self.menuBar()
+        file1 = menu_bar.addMenu('&Menu')
+        help = menu_bar.addMenu('Help')
+        
+        file1.addAction(save)
+        file1.addAction(build)
 
     def init_table(self):
         self.table = self.findChild(QTableWidget, 'tableWidget')
@@ -259,6 +283,40 @@ class TelegramGUI(QWidget):
 
         self.show_message_box('Success', 'Message Sent!!')
 
+    @asyncSlot()
+    async def invite_users(self):
+        logger.info('invite_users')
+
+        channels = self.get_list_from_string(self.input_channels_invite_users.toPlainText())
+        users = self.get_list_from_string(self.input_users_invite_users.toPlainText())
+        logger.info(f'send_message: channels: {channels}, users: {users}')
+
+        if not channels or not users:
+            self.show_error(message='Please fill all the values.')
+            return
+
+        results = await bot.invite_users(channels, users)
+        logger.info('invite_users results')
+        logger.info(results)
+
+        self.table.setRowCount(len(results))
+        for index, channel in enumerate(results):
+            self.table.setItem(index, 0, QTableWidgetItem(channel))
+            self.table.setItem(index, 1, QTableWidgetItem('Yes' if results.get(channel).get('joined') else 'No'))
+            self.table.setItem(index, 2, QTableWidgetItem(''))
+            self.table.setItem(index, 3, QTableWidgetItem(results.get(channel).get('error')))
+
+        is_success = len(list(filter(lambda channel: results[channel].get('error') is not None, channels))) is 0
+
+        self.show_message_box('Success', 'Invites Sent!!')
+
+    def get_list_from_string(self, input_string):
+        list_str = input_string.strip()
+        list_data = re.sub(r'\s+', ',', list_str)
+        list_data = [x.strip() for x in list_data.split(',') if x.strip()]
+        return list_data
+
+
     def show_error(self, title='Error', message=''):
         QMessageBox.about(self, title, message)
 
@@ -269,6 +327,8 @@ class TelegramGUI(QWidget):
         message_box.setWindowTitle(title)
         message_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         # message_box.buttonClicked.connect(message_box_on_click)
+
+        self.statusBar().showMessage(f'{title}: {message}')
 
         if(message_box.exec() == QMessageBox.Ok):
             print('OK')
