@@ -20,7 +20,7 @@ class TelegramGUI(QMainWindow):
 
     def __init__(self, loop=None):
         super().__init__()
-        uic.loadUi('telegram/gui/ui/form.ui', self)
+        uic.loadUi('/Volumes/Main/CM/TGramBot/telegram/gui/ui/form.ui', self)
         self.loop = loop
         self.init_components()
 
@@ -29,6 +29,7 @@ class TelegramGUI(QMainWindow):
         self.tab_widget.setTabEnabled(1, False)
         self.tab_widget.setTabEnabled(2, False)
         self.tab_widget.setTabEnabled(3, False)
+        self.tab_widget.setTabEnabled(4, False)
 
         # Input for Page 1
         self.input_session = self.findChild(QLineEdit, 'input_session')
@@ -206,6 +207,7 @@ class TelegramGUI(QMainWindow):
         self.show_message_box('Sign In', 'Sign In Successful')
         self.tab_widget.setTabEnabled(2, True)
         self.tab_widget.setTabEnabled(3, True)
+        self.tab_widget.setTabEnabled(4, True)
         self.tab_widget.setCurrentIndex(2)
 
     @asyncSlot()
@@ -219,6 +221,7 @@ class TelegramGUI(QMainWindow):
         self.tab_widget.setTabEnabled(1, False)
         self.tab_widget.setTabEnabled(2, False)
         self.tab_widget.setTabEnabled(3, False)
+        self.tab_widget.setTabEnabled(4, False)
         self.tab_widget.setCurrentIndex(0)
     
     @asyncSlot()
