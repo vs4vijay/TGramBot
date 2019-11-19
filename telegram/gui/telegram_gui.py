@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import re
+import os
 import sys
 import signal
 import asyncio
@@ -20,9 +21,20 @@ class TelegramGUI(QMainWindow):
 
     def __init__(self, loop=None):
         super().__init__()
-        uic.loadUi('/Volumes/Main/CM/TGramBot/telegram/gui/ui/form.ui', self)
+        uic.loadUi(self.get_ui_path('form.ui'), self)
         self.loop = loop
         self.init_components()
+
+    def get_ui_path(self, ui_file):
+      if getattr(sys, 'frozen', False):
+        bundle_dir = sys._MEIPASS
+        ui_path = f'{bundle_dir}/{ui_file}'
+      else:
+        bundle_dir = os.path.dirname(os.path.abspath(__file__))
+        ui_path = f'{bundle_dir}/ui/{ui_file}'
+      print('bundle_dir', bundle_dir)
+      print('ui_path', ui_path)
+      return ui_path
 
     def init_components(self):
         self.tab_widget = self.findChild(QTabWidget, 'tabWidget')

@@ -283,4 +283,15 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
     pyinstaller app.py
 
+        def get_ui_path(self, ui_file):
+      if getattr(sys, 'frozen', False):
+        bundle_dir = sys._MEIPASS
+        ui_path = f'{bundle_dir}/{ui_file}'
+      else:
+        bundle_dir = os.path.dirname(os.path.abspath(__file__))
+        ui_path = f'{bundle_dir}/ui/{ui_file}'
+      print('bundle_dir', bundle_dir)
+      print('ui_path', ui_path)
+      return ui_path
+
 ```
