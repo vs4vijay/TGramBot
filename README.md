@@ -280,6 +280,10 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
     pip install pyinstaller
 
     pyinstaller --onefile --windowed app.py
+    
+    pyinstaller --onefile --windowed telegram/gui/telegram_gui.py
+
+    # --onedir for DEBUG
 
     pyinstaller app.py
 

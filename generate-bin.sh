@@ -3,8 +3,6 @@
 # Pre-requisite: python3 -m pip install pyinstaller
 
 echo "[+] Generating Binary"
-# pyinstaller --onefile --windowed telegram/gui/telegram_gui.py
-# --onedir for DEBUG
 
 CURRENT_DIR=$(pwd)
 
