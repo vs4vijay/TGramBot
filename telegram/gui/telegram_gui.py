@@ -181,6 +181,7 @@ class TelegramGUI(QMainWindow):
             self.tab_widget.setTabEnabled(0, False)
             self.tab_widget.setTabEnabled(2, True)
             self.tab_widget.setTabEnabled(3, True)
+            self.tab_widget.setTabEnabled(4, True)
             self.tab_widget.setCurrentIndex(2)
         else:
             title = 'Session Initiate'
