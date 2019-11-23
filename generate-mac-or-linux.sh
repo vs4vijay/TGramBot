@@ -7,7 +7,7 @@ echo "[+] Generating Binary"
 CURRENT_DIR=$(pwd)
 
 pyinstaller --onefile --clean --windowed \
-            --add-data "${CURRENT_DIR}/telegram/gui/ui/form.ui:." \
+            --add-data "${CURRENT_DIR}/telegram/gui/*/form.ui:." \
             telegram/gui/telegram_gui.py 
 
 # pyinstaller telegram_gui.spec

@@ -10,7 +10,7 @@ from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelReque
 
 from telegram.core.logger import logger
 
-SESSION_FOLDER = 'sessions'
+SESSION_FOLDER = '.'
 
 class Bot:
 

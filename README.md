@@ -298,4 +298,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
       print('ui_path', ui_path)
       return ui_path
 
+
+C:/Users/<USER>/AppData/Local/<APPNAME>
+
+~/Library/Application Support/<APPNAME>
+
 ```
