@@ -9,6 +9,7 @@ from telethon.errors import FloodWaitError, MultiError, RPCError
 from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest, InviteToChannelRequest
 
 from telegram.core.logger import logger
+from telegram.core.util import resource_path
 
 SESSION_FOLDER = '.'
 
@@ -21,6 +22,7 @@ class Bot:
         # self.session = MemorySession(config['APP_SESSION'])
         # self.session = MemorySession()
         session_file = f'{SESSION_FOLDER}/{self.config["APP_SESSION"]}'
+        session_file=resource_path(session_file)
         self.client = TelegramClient(session_file, self.config['API_KEY'], self.config['API_HASH'], loop=loop)
         self.client.session.save_entities = False
         session = StringSession.save(self.client.session)

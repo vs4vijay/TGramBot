@@ -32,8 +32,6 @@ class TelegramGUI(QMainWindow):
       else:
         bundle_dir = os.path.dirname(os.path.abspath(__file__))
         ui_path = f'{bundle_dir}/ui/{ui_file}'
-      print('bundle_dir', bundle_dir)
-      print('ui_path', ui_path)
       return ui_path
 
     def init_components(self):
