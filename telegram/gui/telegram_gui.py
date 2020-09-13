@@ -249,8 +249,34 @@ class TelegramGUI(QMainWindow):
             return
         
         results = {}
-        for channel in channels:
-            results[channel] = await bot.join_channel(channel)
+
+        try:
+          for channel in channels:
+              # results[channel] = await bot.join_channel(channel)
+              # loop1 = asyncio.get_event_loop()  # get the default loop for the main thread
+              # await self.loop.create_task(bot.join_channel(channel))
+              self.loop.run_in_executor(None, bot.join_channel, [channel])
+              # loop1.run_until_complete()
+        except Exception as e:
+          print(f'------- Exception {e} - {sys.exc_info()}')
+          pass
+
+
+        # pending = asyncio.Task.all_tasks()
+        # print('pending takssss')
+        # print(pending)
+        # self.loop.run_until_complete(asyncio.gather(*pending))
+
+        # print('---- Killing tasks')
+        # pending = asyncio.Task.all_tasks()
+        # print('pending takssss')
+        # print(pending)
+        # for task in pending:
+        #   print('task ')
+        #   print(task)
+        #   task.cancel()
+        #   with suppress(asyncio.CancelledError):
+        #     self.loop.run_until_complete(task)
 
         logger.info('join_channels results')
         logger.info(results)
@@ -361,7 +387,10 @@ def main_gui():
     ex.show()
 
     with loop:
-        sys.exit(loop.run_forever())
+      print('------- in with loop')
+      sys.exit(loop.run_forever())
+
+   
 
 if __name__ == '__main__':
     main_gui()

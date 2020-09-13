@@ -212,6 +212,38 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
+loop.create_task(client.send_message('TelethonOfftopic', 'Hey guys!'))
+
+pending = asyncio.Task.all_tasks()
+
+
+
+  loop = asyncio.get_event_loop()
+    blocking_tasks = [
+        loop.run_in_executor(executor, blocks, i)
+        for i in range(6)
+    ]
+    log.info('waiting for executor tasks')
+    completed, pending = await asyncio.wait(blocking_tasks)
+    results = [t.result() for t in completed]
+    log.info('results: {!r}'.format(results))
+
+
+
+import threading
+
+def fire_and_forget(f):
+    def wrapped():
+        threading.Thread(target=f).start()
+
+    return wrapped
+
+@fire_and_forget
+def foo():
+    time.sleep(1)
+    print("foo() completed")
+
+
 
 ```
 
@@ -220,6 +252,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 ### GUI
 
 ```
+
+
 
     pip3 install PyQt5==5.11.3
 
