@@ -12,7 +12,7 @@ hyperframe==5.2.0
 idna==2.8
 multidict==4.5.2
 pyaes==1.6.1
-pyasn1==0.4.7
+pyasn1==0.4.8
 PyQt5==5.11.3
 PyQt5-sip==4.19.19
 python-dotenv==0.10.3
