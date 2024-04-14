@@ -9,7 +9,7 @@ hpack==3.0.0
 httpcore==0.3.0
 httptools==0.0.13
 hyperframe==5.2.0
-idna==2.8
+idna==3.7
 multidict==4.5.2
 pyaes==1.6.1
 pyasn1==0.4.7
