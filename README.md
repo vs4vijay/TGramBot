@@ -3,6 +3,17 @@ TGramBot
 
 A Telegram Bot Control Center to send messages to list of channels
 
+## Contribution Guidelines
+
+To contribute to this project, please follow the guidelines below:
+
+- Fork the repository and create your branch from `main`.
+- Make sure your code adheres to the coding standards and passes all the automated tests.
+- Submit a pull request (PR) with your changes.
+- Your PR will be reviewed by the maintainers, and feedback will be provided if necessary.
+- Once approved, your PR will be merged into the main branch.
+
+Please note that all contributions must pass automated tests and adhere to the coding standards set for this project.
 
 ## Pre-requisites
 
