@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  lint-test-build:
+  pr-gate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
