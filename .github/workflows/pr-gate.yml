@@ -28,5 +28,8 @@ jobs:
       - name: Run tests
         run: pytest
 
-      - name: Build
-        run: echo "TODO Add commands to build the project here"
+      - name: Build for Mac or Linux
+        run: ./generate-mac-or-linux.sh
+      
+      - name: Build for Windows
+        run: ./generate-win.bat
