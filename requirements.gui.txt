@@ -2,7 +2,7 @@ asyncqt==0.7.0
 pyaes==1.6.1
 pyasn1==0.4.7
 PyQt5==5.11.3
-PyQt5-sip==4.19.19
+PyQt5-sip==12.15.0
 python-dotenv==0.10.3
 rsa==4.7
 Telethon==1.10.3
