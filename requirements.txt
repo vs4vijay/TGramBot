@@ -25,5 +25,5 @@ sanic-openapi==0.6.0
 Telethon==1.10.3
 ujson==1.35
 urllib3==1.25.9
-uvloop==0.13.0
+uvloop==0.21.0
 websockets==7.0
